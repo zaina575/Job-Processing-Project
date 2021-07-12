@@ -1,0 +1,124 @@
+Problem we are solving: Creating a program called Job Queue that stores information about particular jobs and processes them.
+
+I will first complete the dequeue method in the Queue class. I will use the enqueue method and previous handouts to figure out how to
+code the dequeue method. The dequeue method must meet three cases where there is no objects, one object, and more than one object. I 
+will create two scenarios for when there was only one object in the queue and the other scenario for when there is more than one 
+object in the queue. For the scenario for only object, I will use an if statement to see if lastNode is equal to the front where the 
+front is the nextNode from lastNode. If they are the same, I will create a temp node to store the value of the lastNode which is the
+front. I will set the lastNode to null and return the temp variable's content which stored the front object that we removed. For the 
+other scenario, I will create a variable that stores the old front and a variable to store the new front. Then, I will set the next 
+node from lastNode to the new front. Then, I will return the old front variable's contents for the front object I removed.
+
+*switching to TimeShare.java*
+
+In the main method, I will create three empty queue objects called inputQ, activeQ, and finalQ. Then, I will have a call to my
+start method which runs the program with a valid file passed in at the command line. I will pass the array of strings called args, the
+inputQ queue, the activeQ queue, and the finalQ into the start method. The main method will throw both an IOException and 
+CloneNotSupportedException.
+
+
+The start method will have a four parameters an array of strings called args, the input queue, active job queue, and final processed
+queue. This method will also throw both an IOException and CloneNotSupportedException. I will work on making sure that the user inputs
+a valid file to the command line. I will have a try/catch statement to catch to see if the user put a valid file name and to ensure 
+that they do include a file name at the command line. If the user does not include a file at the command line, it will exit the 
+program completly. In addition, if the user does not input a valid file name, an error message will be sent, and it will exit the 
+program. Once a valid file is given at the command line, I will use a Scanner called in to read the file stored in the args array at 
+index zero. Then, I will read the file to the end of the file and store the job name, arrival time, and run time in three seperate 
+variables. These variables will be passed into the Job constructor and add each object to the queue called inputQ. After all the
+items are successfully added into the inputQ. The processjobs method will be called with the parameters of the inputQ, activeQ,
+and finalQ.
+
+
+
+The processjobs method will take three queue objects as its parameters. I will have five variables an integer for the clock, 
+an integer for idle, an integer for usage, a Job variable called nextJob, and a Job variable called currentJob.I will have a do while statement where it will keep running until both inputQ and activeQ are empty.This method will also throw CloneNotSupportedException.
+In the do while statement, it will consist of 5 if statements:
+1) One where if the inputQ is not empty, it will get the nextJob which is the front of the inputQ queue. If the nextJob's 
+arrival time matches the clock, then the object will be dequeued and the object will be added to activeQ queue. 
+2)There will be another if statement inside the do while loop where if activeQ is not empty, then the currentJob which is the front 
+job of the activeQ queue. If the currentJob's run time equals the clock minus the currentJob's start time and the currentJob has been processing, then the turnaround time will be computed and changed. The currentJob will then be added to the finalQ queue and the 
+currentJob will be removed from the activeQ queue.
+3)The next if statement is another if activeQ is not empty, then get the currentJob which is the front job of the activeQ queue. If
+the currentJob's arrival time is less than or equal to the clock and the currentJob has not been processing, then set the start 
+time to the clock for the currentJob. It will also set the wait time for the currentJob.
+4)There will be another if statement where if the activeQ is empty and the inputQ queue is not empty. Then, increment the idle time
+by 1.
+5) There will be another if statement where if the activeQ is not empty, then increment the usage time by 1.
+
+After all the if statements, it will increment the clock by 1.
+
+This process continues until all jobs are processed. Once all jobs are processed, it will call the print method using the parameters
+of the finalQ queue, the idle time variable, and the usage time variable.
+
+
+
+The print method will take one queue object and two integers as parameters and throw CloneNotSupportedException. 
+I will create a copy of the Queue passed in, and print out the summary report titles. Then, I will use a while loop where 
+while the copy is not empty, print the job in front using the toString method and removing the object from the copy of the queue.
+Then, I will print the average wait time with a call to the calculating the average wait time and passing in the finalQ queue as 
+a parameter. I will also print the CPU Usage time and convert the value to a double value to two decimal places. Then, I will print
+the CPU Idle time and convert the value to a double value to two decimal places. Lastly, I will print the CPU Usage time as a 
+percentage to two decimal places. All the values used the twoDecimals method to keep the numbers formatted to two decimal places.
+
+
+The calcAverageWait method will take in one Queue object as its parameter. I will first make a deep copy of the finalQ because
+I don't want to change the the actual finalQ. I will make three double variables: average, sum, and count. I will use a while 
+loop where while the copy queue is not empty, get the front job. Add the front job's wait time to sum variable and increment the 
+count by 1 which represents the number of objects in the queue. Then, remove the front job from the copy queue. After the copy queue
+is empty, it will compute the average wait time and return it.
+
+
+The calcCPUUsage method will take in two integers as parameters. I will create one double value that represents the cpuUsage and 
+set it equal to (usage time/(usage time + idle time)) times 100 since its a percentage. Then, I returned the CPUUsage as a percentage.
+
+The twoDecimals method will take a double value as a parameter. I will create three long variables roundedAmount, before, and after. 
+These variables will allow me to use an if/else statement to appropriately convert a double value to two decimals places. The method
+will return a string that is a number to only two decimal places.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+Tracing through my own file: myjobs
+Clock      CPU             Comments
+1          job1            job1 arrives
+2          job1           
+3	   job2            job2 arrives,job1 done
+4          job2            
+5          job2            job3 arrives
+6          job2
+7          job2            job4 arrives
+8          job3            job2 done
+9          job4            job5 arrives, job3 done
+10         job4         
+11         job4
+12         job5            job4 done
+13         job5
+14         job5
+15         job5            
+16                         job5 done
+
+job1 starts at clock time 1.
+job2 starts at clock time 3.
+job3 starts at clock time 8.
+job4 starts at clock time 9.
+job5 starts at clock time 12.
+
+job1's wait time was zero because it was automatically processed.
+job2's wait time was zero because it was automatically processed.
+job3's wait time was three because it had to wait for 3 clock time to pass.
+job4's wait time was two because it had to wait for 2 clock time to pass.
+job5's wait time was three because it had to wait for 3 clock time to pass.
+
+job1's turnaround time is 2+0 =2.
+job2's turnaround time is 5+0 =5.
+job3's turnaround time is 1+3 =4. 
+job4's turnaround time is 3+2 =5.
+job5's turnaround time is 4+3 =7. 
+
+
+The average wait time is (0+0+3+2+3)/5 = 1.60
+The usage time is 15 because the computer was used till clock minute 15.
+The idle time is 0 because the computer was constantly processing jobs.
+The usage time as a percentage is (15/(15+0))*100% = 100%.
